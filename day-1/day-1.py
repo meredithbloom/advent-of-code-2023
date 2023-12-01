@@ -55,8 +55,8 @@ def find_words(string):
     for num_word in numbers:
         if (num_word in string):
             ind = string.find(num_word)
-            vals[ind] = num_word
-            #vals[ind] = num_string_vals[num_word]
+            #vals[ind] = num_word
+            vals[ind] = num_string_vals[num_word]
     return vals
 
 def find_digits(string):
@@ -68,15 +68,49 @@ def find_digits(string):
 
 part2_sum = 0
 
-for line in split_test:
-    print(line)
+for line in split_vals:
+    #print(line)
     combined = {**find_words(line), **find_digits(line)}
-    print(combined)
+    #print(combined)
     sorted_keys = sorted(combined.keys())
     #print(sorted_keys)
-    #first, last = str(combined[sorted_keys[0]]), str(combined[sorted_keys[-1]])
-    #print(first+last)
-    #val = int(first+last)
-    #part2_sum = part2_sum + val
+    first, last = str(combined[sorted_keys[0]]), str(combined[sorted_keys[-1]])
+    # print(first+last)
+    val = int(first+last)
+    part2_sum = part2_sum + val
 
 print(part2_sum)
+
+def argmin(a):
+    return min(range(len(a)), key=lambda x : a[x])
+def argmax(a):
+    return max(range(len(a)), key=lambda x : a[x])
+
+str_nums = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+total = 0
+
+for line in split_vals:
+    # print(line)
+    first_num_idxs = [line.find(x) for x in nums]
+    last_num_idxs = [line.rfind(x) for x in nums]
+    first_str_idxs = [line.find(x) for x in str_nums]
+    last_str_idxs = [line.rfind(x) for x in str_nums]
+
+    first_num_idxs[:] = [x if x != -1 else len(line) for x in first_num_idxs]
+    first_str_idxs[:] = [x if x != -1 else len(line) for x in first_str_idxs]
+
+    if min(first_num_idxs) < min(first_str_idxs):
+        tens = argmin(first_num_idxs)
+    else:
+        tens = argmin(first_str_idxs)
+
+    if max(last_num_idxs) > max(last_str_idxs):
+        ones = argmax(last_num_idxs)
+    else:
+        ones = argmax(last_str_idxs)
+    t = tens*10 + ones
+    # print(tens, ones, t)
+    total += t
+    
+print(total)
