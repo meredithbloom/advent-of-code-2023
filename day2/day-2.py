@@ -4,6 +4,10 @@ all_games = open('input-day-2.txt', 'r')
 
 games = all_games.read().split('\n')
 
+test_all_games = open('test.txt', 'r')
+
+test_games = test_all_games.read().split('\n')
+print(test_games)
 # print(games[0])
 
 # PART 1
@@ -13,12 +17,18 @@ games = all_games.read().split('\n')
 
 game_dict = {}
 
-base_rules = Counter({'red': 12, 'green': 13, 'blue': 14})
+base_rules = {'red': 12, 'green': 13, 'blue': 14}
 colors = ['red', 'green', 'blue']
 
 def possible_round(cubes):
     colors = cubes.split(', ')
-    print(colors)
+    for x in colors:
+        count, color = x.split()
+        #print(color, count)
+        # print(base_rules[color])
+        if int(count) > int(base_rules[color]):
+            return False
+    return True
 
 
 def check_max(game):
@@ -29,7 +39,7 @@ def check_max(game):
     # we need to check and see which color had a count 12, 13, or 14 to find out if the rule is broken
     elif (max(counts_only) <= 14 and max(counts_only)>=12):
         return 'extra check'
-        print(counts_only)
+        #print(counts_only)
     # all the numbers are less than 12, which means that there's no chance of a round falling outside of the game cube count restrictions
     else:
         return 'possible'
@@ -44,12 +54,17 @@ for g in range(len(games)):
     elif (check_max(after) == 'extra check'):
         # function for extra check
         rounds = [x.strip() for x in after.split(';')]
+        pos = True
         for r in rounds:
-            possible_round(r)
-        #print(rounds)
+            if (possible_round(r) == False):
+                pos = False
+        if (pos == True):
+            total = total + (g+1)
+        # print(rounds)
     elif (check_max(after) == False):
         continue
     
     #print(rounds)
+print(total)
 
 
