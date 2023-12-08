@@ -65,6 +65,34 @@ for g in range(len(games)):
         continue
     
     #print(rounds)
-print(total)
+#print(total)
+
+
+# PART 2
+# in each game, what is the fewest number of cubes of each color that could have been in the bag to make the game possible?
+
+def find_maxes(game):
+    combined = game.replace("; ", ", ")
+    divided = combined.split(', ')
+    reds, blues, greens = [], [], []
+    for pair in divided:
+        count_only = int(pair.split()[0])
+        if "red" in pair:
+            reds.append(count_only)
+        elif "green" in pair:
+            greens.append(count_only)
+        elif "blue" in pair:
+            blues.append(count_only)
+    min_red, min_blue, min_green = max(reds), max(blues), max(greens)
+    cube_val = min_red*min_blue*min_green
+    return cube_val
+
+total_cube = 0
+for g in range(len(games)):
+    after = games[g].split(':')[1].strip()
+    to_add = find_maxes(after)
+    total_cube = total_cube + to_add
+
+print(total_cube)
 
 
